@@ -1,7 +1,7 @@
-const { forEach } = require("lodash");
+
 
 const gallery = document.querySelector("main");
-
+const filters = document.getElementById("#portfolio h2");
 
 async function getWorks() {
   const answer = await fetch("http://localhost:5678/api/works");
@@ -14,15 +14,16 @@ getWorks();
 async function displayWorks () {
 const arrayWorks = await getWorks();
 arrayWorks.forEach((project) => {
-  const design= document.createElement("design");
+  const figure= document.createElement("figure");
   const img = document.createElement("img");
-  const text = document.createElement("text");
+  const figcaption = document.createElement("figcaption");
   img.src= project.imageUrl;
-  text.textContent = project.title;
-  design.classList.add("gallery img");
-  design.appendChild(img);
-  design.appendChild(text);
-  gallery.appendChild(design);
+  figcaption.innerHTML = project.title;
+  figure.classList.add("gallery");
+  figure.classList.add("gallery_img");
+  figure.appendChild(img);
+  figure.appendChild(figcaption);
+  gallery.appendChild(figure);
 console.log("ca marche");
 });
 
@@ -30,7 +31,7 @@ console.log("ca marche");
 displayWorks();
 
 
-
+/*******affichage filtres***************** */
 
 async function getCatergories(){
   const response = await fetch("http://localhost:5678/api/categories");
@@ -38,3 +39,30 @@ async function getCatergories(){
 }
 getCatergories();
 
+
+async function Buttons() {
+  const categories = await getCatergories();
+  console.log(categories);
+
+categories.forEach((category)  => {
+const button = document.createElement("button");
+button.innerHTML= category.name.toUpperCase();
+button.classList.add(".input");
+button.id=category.id;
+filters.appendChild(button);
+
+
+} )}
+
+Buttons();
+
+
+////filtrer///
+
+async function filterCategories () {
+  const AllWorks = await getWorks;
+  
+
+}
+
+filterCategories();
