@@ -126,8 +126,19 @@ li:hover {
 	margin-bottom: 1em;
 }
 
-.filters {
+.input {
 	border-radius: 50%;
+	border: 1px solid #1D6154;
+	width: 585px;
+	height: 38px;
+	top: 812px;
+	left: 427px;
+	gap: 0px;
+	border-radius: 60px 0px 0px 0px;
+	border: 1px 0px 0px 0px;
+	opacity: 0px;
+
+
 }
 
 .gallery {
