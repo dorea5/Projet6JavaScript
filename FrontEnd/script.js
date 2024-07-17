@@ -1,7 +1,5 @@
-
-
-const gallery = document.querySelector("main");
-const filters = document.getElementById("#portfolio h2");
+const gallery = document.querySelector(".gallery");
+const filters = document.querySelector(".filters");
 
 async function getWorks() {
   const answer = await fetch("http://localhost:5678/api/works");
@@ -19,8 +17,6 @@ arrayWorks.forEach((project) => {
   const figcaption = document.createElement("figcaption");
   img.src= project.imageUrl;
   figcaption.innerHTML = project.title;
-  figure.classList.add("gallery");
-  figure.classList.add("gallery_img");
   figure.appendChild(img);
   figure.appendChild(figcaption);
   gallery.appendChild(figure);
