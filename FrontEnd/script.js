@@ -43,12 +43,9 @@ async function Buttons() {
 categories.forEach((category)  => {
 const button = document.createElement("button");
 button.innerHTML= category.name.toUpperCase();
-button.classList.add(".input");
 button.id=category.id;
 filters.appendChild(button);
-
-
-} )}
+})}
 
 Buttons();
 
