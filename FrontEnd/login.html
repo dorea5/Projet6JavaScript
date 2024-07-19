@@ -8,6 +8,8 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <title>Login Page</title>
   <link rel="stylesheet" href="./assets/login.css">
+  <link rel="stylesheet" href="./assets/style.css">
+
 </head>
 <body>
   <header>
@@ -30,13 +32,16 @@
     
     <section id="contact">
       <h2>Log In</h2>
-      <p></p>
+      <div class="error">
+        <p>erreur</p>
+      </div>
+      
       
       <form action="#" method="post">
-        <label for="name">E-mail</label>
-        <input type="text" name="name" id="name">
-        <label for="email">Mot de passe</label>
-        <input type="email" name="email" id="email">
+        <label for="email">E-mail</label>
+        <input type="password" id="email">
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password">
         <input type="submit" value="Se connecter">
         <p>Mot de passe oublié</p>
       </form>
