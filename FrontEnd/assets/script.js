@@ -40,11 +40,11 @@ async function Buttons() {
   const categories = await getCatergories();
   console.log(categories);
 
-categories.forEach((category)  => {
-const button = document.createElement("button");
-button.innerHTML= category.name.toUpperCase();
-button.id=category.id;
-filters.appendChild(button);
+categories.forEach(category => {
+const btn = document.createElement("button");
+btn.innerHTML= category.name.toUpperCase();
+btn.id=category.id;
+filters.appendChild(btn);
 })}
 
 Buttons();
@@ -53,7 +53,18 @@ Buttons();
 ////filtrer///
 
 async function filterCategories () {
-  const AllWorks = await getWorks;
+  const AllWorks = await getWorks();
+  const buttons = document.querySelectorAll(".filters button");
+  buttons.forEach(button => {
+    button.addEventListener("click",(e) => {
+      btnId = e.target.id;
+      console.log(btnId);
+
+    });
+  } );
+
+
+
   
 
 }
