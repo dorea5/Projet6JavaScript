@@ -58,6 +58,7 @@ async function filterCategories () {
   buttons.forEach(button => {
     button.addEventListener("click",(e) => {
       btnId = e.target.id;
+      gallery.innerHTML = "";
       console.log(btnId);
 
     });
