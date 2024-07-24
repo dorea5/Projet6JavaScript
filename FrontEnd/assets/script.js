@@ -22,7 +22,7 @@ function createprojects(project) {
   const img = document.createElement("img");
   const figcaption = document.createElement("figcaption");
   img.src = project.imageUrl;
-  figcaption.innerHTML = project.title;
+  figcaption.textContent = project.title;
   figure.appendChild(img);
   figure.appendChild(figcaption);
   gallery.appendChild(figure);
@@ -48,8 +48,9 @@ async function Buttons() {
 
   categories.forEach(category => {
     const btn = document.createElement("button");
-    btn.innerHTML = category.name.toUpperCase();
+    btn.textContent= category.name.toUpperCase();
     btn.id = category.id;
+    btn.classList.add("button_style");
     filters.appendChild(btn);
   })
 }
@@ -64,7 +65,7 @@ async function filterCategories() {
   const buttons = document.querySelectorAll(".filters button");
   buttons.forEach(button => {
     button.addEventListener("click", (e) => {
-      btnId = e.target.id;
+      const btnId = e.target.id;
       gallery.innerHTML = ""; /// suppression de la gallerie avant filtrage//
       if (btnId !== "0") {
         const worksfilteredcategory = AllWorks.filter(project => {
