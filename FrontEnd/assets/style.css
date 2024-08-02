@@ -321,10 +321,19 @@ footer nav ul {
 	font-size: 20px;
 	padding-bottom: 0;
 	padding: 3em;
-	margin: 10em;
+	margin-left: 44em;
+	margin-top: 10em;
 	
 
 
+}
+
+.modal_add_photo .fa-xmark {
+	padding: 2em;
+}
+
+.modal_add_photo .arrow_left {
+	margin: 1em;
 }
 
 .modal_add_photo form {
