@@ -89,3 +89,28 @@ async function filterCategories() {
 
 
 filterCategories();
+
+const xmark = document.querySelector(".container_modal .fa-xmark");
+const containermodal = document.querySelector(".container_modal");
+const editicon = document.querySelector(".edit_icon");
+const modifier = document.querySelector ( " .modifier");
+const loged = window.sessionStorage.loged;
+const lougout = document.querySelector("header nav .logout");
+
+if (loged == "true") {
+  lougout.textContent="logout";
+  modifier.textContent="modifier";
+  editicon.style.display = 'inline-flex';
+  lougout.addEventListener("click",() => {
+window.sessionStorage.loged = false;});
+}
+
+//affichage modale quand connecté//
+
+modifier.addEventListener("click", () => {
+containermodal.style.display='inline-flex';
+});
+
+xmark.addEventListener("click", () => {
+  containermodal.style.display='none';
+});
