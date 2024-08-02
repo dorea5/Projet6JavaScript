@@ -163,22 +163,24 @@ function deleteworks() {
       return response.json()
     })
     .then((data)=>{
-      console.log("le delete a reussi:",data)
-      DisplayPictures()  //reactualisation modale//
-      displayWorks()   //reactualisation vehicules//
-    })
+      console.log("le delete a reussi:",data);
+      DisplayPictures() ;
+      displayWorks();
+
+  })
   })
  })
 }
  //faire apparaitre deuxieme modale//
 
- const btnaddmodal = document.querySelector(".modal_gallery button")
- const modaladdphotos = document.querySelector(".modal_add_photos")
+ const btnaddmodal = document.querySelector(".container_modal .add_photo")
+ const modaladdphotos = document.querySelector(".modal_add_photo")
  const modalgallery = document.querySelector(".modal_gallery")
- const arrowleft = document.querySelector("arrow_left")
+ const arrowleft = document.querySelector(".arrow_left")
 
  function displayaddmodal () {
-  btnaddmodal.addEventListener("click",()=>{modaladdphotos.style.display="inline-flex";
+  btnaddmodal.addEventListener("click",()=>{
+    modaladdphotos.style.display="inline-flex";
     modalgallery.style.display="none";
   })
  }
