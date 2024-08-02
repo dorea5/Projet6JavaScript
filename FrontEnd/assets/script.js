@@ -90,12 +90,15 @@ async function filterCategories() {
 
 filterCategories();
 
+
 const xmark = document.querySelector(".container_modal .fa-xmark");
 const containermodal = document.querySelector(".container_modal");
 const editicon = document.querySelector(".edit_icon");
 const modifier = document.querySelector ( " .modifier");
 const loged = window.sessionStorage.loged;
 const lougout = document.querySelector("header nav .logout");
+const pictures =document.querySelector("pictures");
+
 
 if (loged == "true") {
   lougout.textContent="logout";
@@ -110,7 +113,60 @@ window.sessionStorage.loged = false;});
 modifier.addEventListener("click", () => {
 containermodal.style.display='inline-flex';
 });
-
+//exit//
 xmark.addEventListener("click", () => {
   containermodal.style.display='none';
 });
+
+
+//affichage photos dans modale//
+
+async function DisplayPictures () {
+  gallery.innerHTML=""
+  const allpictures =  await getWorks()
+  allpictures.forEach(picture => {
+  const figure = document.createElement("figure")
+  const span = createElement("span")
+  const img = document.createElement("img")
+  const trash = document.createElement("i")
+  trash.classList.add("fa-solid", "fa-trash-can")
+  trash.id = project.id
+  img.src =project.imageUrl
+  span.appendChild(trash)
+  figure.appendChild(span)
+  figure.appendChild(img)
+  picture.appendChild(figure)
+
+  });
+deleteworks()
+}
+
+DisplayPictures();
+
+//suppression image modale//
+
+function deleteworks() {
+  const trashALL = docume.querySelectorAll(".fa-trash-can")
+ trashALL.forEach(trash => {
+  trash.add.addEventListener("click", (e)=>{
+    const id = trash.id
+    const init ={
+      method:"DELETE",
+      headers : {"content-Type": "application/json"},
+
+    }
+    fetch("http://localhost:5678/api/works/1"+ id,init)
+    .then((response)=>{
+      if (!response.ok){
+        console.log("delete na pas marché")
+      }
+      return response.json()
+    })
+    .then((data)=>{
+      console.log("le delete a reussi:",data)
+      DisplayPictures()  //reactualisation modale//
+      displayWorks()   //reactualisation vehicules//
+    })
+  })
+ })
+}
