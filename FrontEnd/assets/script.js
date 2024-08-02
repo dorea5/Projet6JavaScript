@@ -170,3 +170,16 @@ function deleteworks() {
   })
  })
 }
+ //faire apparaitre deuxieme modale//
+
+ const btnaddmodal = document.querySelector(".modal_gallery button")
+ const modaladdphotos = document.querySelector(".modal_add_photos")
+ const modalgallery = document.querySelector(".modal_gallery")
+ const arrowleft = document.querySelector("arrow_left")
+
+ function displayaddmodal () {
+  btnaddmodal.addEventListener("click",()=>{modaladdphotos.style.display="inline-flex";
+    modalgallery.style.display="none";
+  })
+ }
+ displayaddmodal();
