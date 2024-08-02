@@ -97,7 +97,7 @@ const editicon = document.querySelector(".edit_icon");
 const modifier = document.querySelector ( " .modifier");
 const loged = window.sessionStorage.loged;
 const lougout = document.querySelector("header nav .logout");
-const pictures =document.querySelector("pictures");
+const pictures =document.querySelector(".pictures");
 
 
 if (loged == "true") {
@@ -122,16 +122,16 @@ xmark.addEventListener("click", () => {
 //affichage photos dans modale//
 
 async function DisplayPictures () {
-  gallery.innerHTML=""
-  const allpictures =  await getWorks()
-  allpictures.forEach(picture => {
+  pictures.innerHTML=""
+  const AllWorks =  await getWorks()
+  AllWorks.forEach(picture => {
   const figure = document.createElement("figure")
-  const span = createElement("span")
+  const span = document.createElement("span")
   const img = document.createElement("img")
   const trash = document.createElement("i")
   trash.classList.add("fa-solid", "fa-trash-can")
-  trash.id = project.id
-  img.src =project.imageUrl
+  trash.id = picture.id
+  img.src =picture.imageUrl
   span.appendChild(trash)
   figure.appendChild(span)
   figure.appendChild(img)
