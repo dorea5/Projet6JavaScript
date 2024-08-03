@@ -48,7 +48,7 @@ async function Buttons() {
 
   categories.forEach(category => {
     const btn = document.createElement("button");
-    btn.textContent= category.name.toUpperCase();
+    btn.textContent = category.name.toUpperCase();
     btn.id = category.id;
     btn.classList.add("button_style");
     filters.appendChild(btn);
@@ -80,11 +80,11 @@ async function filterCategories() {
       else {
         displayWorks();  //tous//
       }
-      
-    console.log(btnId);
 
+      console.log(btnId);
+
+    });
   });
-});
 }
 
 
@@ -94,51 +94,51 @@ filterCategories();
 const xmark = document.querySelector(".container_modal .fa-xmark");
 const containermodal = document.querySelector(".container_modal");
 const editicon = document.querySelector(".edit_icon");
-const modifier = document.querySelector ( " .modifier");
+const modifier = document.querySelector(" .modifier");
 const loged = window.sessionStorage.loged;
 const lougout = document.querySelector("header nav .logout");
-const pictures =document.querySelector(".pictures");
+const pictures = document.querySelector(".pictures");
 
 
 if (loged == "true") {
-  lougout.textContent="logout";
-  modifier.textContent="modifier";
+  lougout.textContent = "logout";
+  modifier.textContent = "modifier";
   editicon.style.display = 'inline-flex';
-  lougout.addEventListener("click",() => {
-window.sessionStorage.loged = false;});
+  lougout.addEventListener("click", () => {
+    window.sessionStorage.loged = false;
+  });
 }
 
 //affichage modale quand connecté//
 
 modifier.addEventListener("click", () => {
-containermodal.style.display='inline-flex';
+  containermodal.style.display = 'inline-flex';
 });
 //exit//
 xmark.addEventListener("click", () => {
-  containermodal.style.display='none';
+  containermodal.style.display = 'none';
 });
 
 
 //affichage photos dans modale//
 
-async function DisplayPictures () {
-  pictures.innerHTML=""
-  const AllWorks =  await getWorks()
-  AllWorks.forEach(picture => {
-  const figure = document.createElement("figure")
-  const span = document.createElement("span")
-  const img = document.createElement("img")
-  const trash = document.createElement("i")
-  trash.classList.add("fa-solid", "fa-trash-can")
-  trash.id = picture.id
-  img.src =picture.imageUrl
-  span.appendChild(trash)
-  figure.appendChild(span)
-  figure.appendChild(img)
-  picture.appendChild(figure)
+async function DisplayPictures() {
+  const AllWorks = await getWorks();
+  AllWorks.forEach(work => {
+    const figure = document.createElement("figure");
+    const span = document.createElement("span");
+    const img = document.createElement("img");
+    const trash = document.createElement("i");
+    trash.classList.add("fa-solid", "fa-trash-can");
+    trash.id = work.id;
+    img.src = work.imageUrl;
+    span.appendChild(trash);
+    figure.appendChild(span);
+    figure.appendChild(img);
+    pictures.appendChild(figure);
 
   });
-deleteworks()
+  deleteworks()
 }
 
 DisplayPictures();
@@ -146,42 +146,42 @@ DisplayPictures();
 //suppression image modale//
 
 function deleteworks() {
-  const trashALL = docume.querySelectorAll(".fa-trash-can")
- trashALL.forEach(trash => {
-  trash.add.addEventListener("click", (e)=>{
-    const id = trash.id
-    const init ={
-      method:"DELETE",
-      headers : {"content-Type": "application/json"},
+  const trashALL = document.querySelectorAll(".fa-trash-can")
+  trashALL.forEach(trash => {
+    trash.add.addEventListener("click", (e) => {
+      const id = trash.id
+      const init = {
+        method: "DELETE",
+        headers: { "content-Type": "application/json" },
 
-    }
-    fetch("http://localhost:5678/api/works/1"+ id,init)
-    .then((response)=>{
-      if (!response.ok){
-        console.log("delete na pas marché")
       }
-      return response.json()
+      fetch("http://localhost:5678/api/works/1" + id, init)
+        .then((response) => {
+          if (!response.ok) {
+            console.log("delete na pas marché")
+          }
+          return response.json()
+        })
+        .then((data) => {
+          console.log("le delete a reussi:", data);
+          DisplayPictures();
+          displayWorks();
+
+        })
     })
-    .then((data)=>{
-      console.log("le delete a reussi:",data);
-      DisplayPictures() ;
-      displayWorks();
-
   })
-  })
- })
 }
- //faire apparaitre deuxieme modale//
+//faire apparaitre deuxieme modale//
 
- const btnaddmodal = document.querySelector(".container_modal .add_photo")
- const modaladdphotos = document.querySelector(".modal_add_photo")
- const modalgallery = document.querySelector(".modal_gallery")
- const arrowleft = document.querySelector(".arrow_left")
+const btnaddmodal = document.querySelector(".container_modal .add_photo")
+const modaladdphotos = document.querySelector(".modal_add_photo")
+const modalgallery = document.querySelector(".modal_gallery")
+const arrowleft = document.querySelector(".arrow_left")
 
- function displayaddmodal () {
-  btnaddmodal.addEventListener("click",()=>{
-    modaladdphotos.style.display="inline-flex";
-    modalgallery.style.display="none";
+function displayaddmodal() {
+  btnaddmodal.addEventListener("click", () => {
+    modaladdphotos.style.display = "inline-flex";
+    modalgallery.style.display = "none";
   })
- }
- displayaddmodal();
+}
+displayaddmodal();
