@@ -155,7 +155,7 @@ function deleteworks() {
         headers: { "content-Type": "application/json" },
 
       }
-      fetch("http://localhost:5678/api/works/1" + id, init)
+      fetch("http://localhost:5678/api/works/" + id, init)
         .then((response) => {
           if (!response.ok) {
             console.log("delete na pas marché")
