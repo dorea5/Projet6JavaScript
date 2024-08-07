@@ -100,14 +100,36 @@ const lougout = document.querySelector("header nav .logout");
 const pictures = document.querySelector(".pictures");
 
 
-if (loged == "true") {
+
+
+
+function isUserLoggedIn() {
+  // Vérifier la présence du token dans le localStorage
+  return localStorage.getItem('token') !== null;
+}
+
+// Fonction de déconnexion (logout)
+function logout() {
+ 
+  localStorage.removeItem('token');
+}
+
+// si lutilisation est connecté
+if (isUserLoggedIn()) {
+  console.log('Utilisateur connecté');
   lougout.textContent = "logout";
   modifier.textContent = "modifier";
   editicon.style.display = 'inline-flex';
-  lougout.addEventListener("click", () => {
-    window.sessionStorage.loged = false;
-  });
+} else {
+  console.log('Utilisateur déconnecté');
 }
+
+// Déconnexion
+logout();
+
+
+
+
 
 //affichage modale quand connecté//
 
@@ -143,7 +165,7 @@ async function DisplayPictures() {
 
 DisplayPictures();
 
-//suppression image modale//
+//suppression image modale// //ALLER DANS LE DOM CHERCHER ELEMENT ET EFFACER//
 
 function deleteworks() {
   const trashALL = document.querySelectorAll(".fa-trash-can")
@@ -155,7 +177,7 @@ function deleteworks() {
         headers: { "content-Type": "application/json" },
 
       }
-      fetch("http://localhost:5678/api/works/" + id, init)
+      fetch("http://localhost:5678/api/works" + id, init)
         .then((response) => {
           if (!response.ok) {
             console.log("delete na pas marché")
@@ -164,24 +186,94 @@ function deleteworks() {
         })
         .then((data) => {
           console.log("le delete a reussi:", data);
-          DisplayPictures();
-          displayWorks();
-
+         
         })
     })
   })
 }
 //faire apparaitre deuxieme modale//
 
-const btnaddmodal = document.querySelector(".container_modal .add_photo")
-const modaladdphotos = document.querySelector(".modal_add_photo")
-const modalgallery = document.querySelector(".modal_gallery")
-const arrowleft = document.querySelector(".arrow_left")
+const btnaddmodal = document.querySelector(".container_modal .add_photo");
+const modaladdphotos = document.querySelector(".modal_add_photo");
+const modalgallery = document.querySelector(".modal_gallery");
+const arrowleft = document.querySelector(".fa-arrow-left");
+const addclose = document.querySelector(".modal_add_photo .fa-xmark");
 
 function displayaddmodal() {
   btnaddmodal.addEventListener("click", () => {
     modaladdphotos.style.display = "inline-flex";
     modalgallery.style.display = "none";
   })
+  arrowleft.addEventListener("click",()=>{
+    modaladdphotos.style.display = "none";
+    modalgallery.style.display = "flex";
+  })
+  addclose.addEventListener("click",()=>{
+    containermodal.style.display = "none"
+  })
 }
 displayaddmodal();
+// previsualisation de limage à ajouter//
+const view = document.querySelector(".container_photo img");
+const inputmodal = document.querySelector(".container_photo .input") ;
+const labelmodal = document.querySelector(".container_photo .label");
+const inconmodal = document.querySelector("container_photo .fa-image");
+const pmodal = document.querySelector(".container_photo p") ;
+
+inputmodal.addEventListener("change",()=>
+  {
+  const file = inputmodal.files[0];
+  console.log(file);
+  if(file){
+    const reader = new FileReader();
+    reader.onload = function (e){
+      view.src = e.target.result;
+      view.style.display = "flex";
+      labelmodal.style.display = "none";
+      inconmodal.style.display = "none";
+      pmodal.style.display = "none";
+    }
+    reader.readAsDataURL(file);
+  }
+  
+})
+
+//LISTE CATEGORIES DANS INPUT//
+async function categoriesadd (){
+const select = document.querySelector(".modal_add_photo select");
+const categories = await getCatergories();
+categories.forEach(category => {
+  const option = document.createElement("option");
+    option.value = category.id;
+    option.textContent = category.name;
+    select.appendChild(option);
+  
+})
+}
+categoriesadd();
+
+//post pour ajouter une photo/
+const form = document.querySelector(".modal_add_photo form");
+const title = document.querySelector(".modal_add_photo #title");
+const category = document.querySelector(".modal_add_photo #category");
+
+form.addEventListener("submit", async (e)=>{
+  e.preventDefault()
+  const formData = new FormData(form);
+  fetch("http://localhost:5678/api/works",{
+    method:"POST",
+    body:JSON.stringify(formData),
+    headers:{
+      "content-Type": "application/json"
+    }
+  })
+  .then(response=> response.json())
+  .then(data=>{
+    console.log(data);
+    console.log("photo ajoutée", data)
+    displayWorks();
+    DisplayPictures;
+  })
+  .catch(error => console.log("erreur",error))
+})
+

@@ -97,16 +97,13 @@ async function login() {
       localStorage.setItem("token", token);
       // redirection page d'accueil
       window.location.href = "./index.html"
-      window.sessionStorage.loged = true;
+     
     }
 
   }
   )
 }
 login();
-
-// email: sophie.bluel@test.tld
-// password: S0phie 
 
 
 
