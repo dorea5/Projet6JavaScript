@@ -125,7 +125,7 @@ if (isUserLoggedIn()) {
 }
 
 // Déconnexion
-logout();
+//logout();
 
 
 
@@ -168,16 +168,16 @@ DisplayPictures();
 //suppression image modale// //ALLER DANS LE DOM CHERCHER ELEMENT ET EFFACER//
 
 function deleteworks() {
-  const trashALL = document.querySelectorAll(".fa-trash-can")
+  const trashALL = document.querySelectorAll(" .fa-trash-can")
+  const token = localStorage.getItem('token')
   trashALL.forEach(trash => {
-    trash.add.addEventListener("click", (e) => {
+    trash.addEventListener("click", (e) => {
       const id = trash.id
       const init = {
         method: "DELETE",
-        headers: { "content-Type": "application/json" },
-
+        headers: { "content-Type": "application/json", "Authorization" : "Bearer" + token},
       }
-      fetch("http://localhost:5678/api/works" + id, init)
+      fetch("http://localhost:5678/api/works/" + id, init)
         .then((response) => {
           if (!response.ok) {
             console.log("delete na pas marché")
@@ -215,9 +215,9 @@ function displayaddmodal() {
 displayaddmodal();
 // previsualisation de limage à ajouter//
 const view = document.querySelector(".container_photo img");
-const inputmodal = document.querySelector(".container_photo .input") ;
-const labelmodal = document.querySelector(".container_photo .label");
-const inconmodal = document.querySelector("container_photo .fa-image");
+const inputmodal = document.querySelector(".container_photo input") ;
+const labelmodal = document.querySelector(".container_photo label");
+const inconmodal = document.querySelector(".container_photo  .fa-image");
 const pmodal = document.querySelector(".container_photo p") ;
 
 inputmodal.addEventListener("change",()=>
@@ -260,12 +260,11 @@ const category = document.querySelector(".modal_add_photo #category");
 form.addEventListener("submit", async (e)=>{
   e.preventDefault()
   const formData = new FormData(form);
-  fetch("http://localhost:5678/api/works",{
+  
+  fetch("http://localhost:5678/api/works/",{
     method:"POST",
     body:JSON.stringify(formData),
-    headers:{
-      "content-Type": "application/json"
-    }
+    headers:{ "content-Type": "application/json", "Authorization" : "Bearer" + token },
   })
   .then(response=> response.json())
   .then(data=>{
@@ -276,4 +275,19 @@ form.addEventListener("submit", async (e)=>{
   })
   .catch(error => console.log("erreur",error))
 })
+
+//valider input//
+function inputok() {
+  const inputvalid = document.querySelector(".modal_add_photo button")
+  form.addEventListener("input",()=>{
+    if(!title.value ==""&&!category.value==""&&!inputFile.value==""){
+      inputvalid.classList.add("valid")
+    }
+    else{
+      inputvalid.classList.remove("valid")
+      inputvalid.disabled=true
+    }
+  })
+}
+inputok();
 

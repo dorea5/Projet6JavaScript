@@ -268,13 +268,17 @@ footer nav ul {
 	
 	width: 90%;
   height: 80px;
+	
+	
 }
 
-.fa-solid .fa-trash-can {
+ .fa-trash-can {
 	font-weight: 900;
 	position: absolute;
-	font-size: 10px;
+	font-size: 15px;
 	cursor: pointer;
+	padding-left: 40px;
+	padding-top: 5px;
 
 }
 
@@ -382,6 +386,8 @@ footer nav ul {
 
 .container_photo img {
 	display: none;
+	position: absolute;
+	height: 100px;
 }
 
 .container_photo input {
