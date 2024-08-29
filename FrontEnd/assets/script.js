@@ -5,9 +5,6 @@ async function getWorks() {
   const answer = await fetch("http://localhost:5678/api/works");
   return await answer.json();
 }
-getWorks();
-
-
 
 async function displayWorks() {
   const projects = await getWorks();
@@ -15,7 +12,6 @@ async function displayWorks() {
     createprojects(project);
   });
 }
-displayWorks();
 
 function createprojects(project) {
   const figure = document.createElement("figure");
@@ -29,67 +25,56 @@ function createprojects(project) {
   console.log("ca marche");
 }
 
-
-
-
-
 /*******affichage filtres***************** */
 
-async function getCatergories() {
+async function getCategories() {
   const response = await fetch("http://localhost:5678/api/categories");
   return await response.json();
 }
-getCatergories();
-
+getCategories();
 
 async function Buttons() {
-  const categories = await getCatergories();
+  const categories = await getCategories();
   console.log(categories);
 
-  categories.forEach(category => {
+  categories.forEach((category) => {
     const btn = document.createElement("button");
     btn.textContent = category.name.toUpperCase();
     btn.id = category.id;
     btn.classList.add("button_style");
     filters.appendChild(btn);
-  })
+  });
 }
 
 Buttons();
-
 
 ////filtrer///
 
 async function filterCategories() {
   const AllWorks = await getWorks();
   const buttons = document.querySelectorAll(".filters button");
-  buttons.forEach(button => {
+  buttons.forEach((button) => {
     button.addEventListener("click", (e) => {
       const btnId = e.target.id;
       gallery.innerHTML = ""; /// suppression de la gallerie avant filtrage//
       if (btnId !== "0") {
-        const worksfilteredcategory = AllWorks.filter(project => {
+        const worksfilteredcategory = AllWorks.filter((project) => {
           return project.categoryId == btnId;
         });
         //tableau trié mais pas affiché//
-        worksfilteredcategory.forEach(project => {
+        worksfilteredcategory.forEach((project) => {
           createprojects(project);
-
         });
-      }
-      else {
-        displayWorks();  //tous//
+      } else {
+        displayWorks(); //tous//
       }
 
       console.log(btnId);
-
     });
   });
 }
 
-
 filterCategories();
-
 
 const xmark = document.querySelector(".container_modal .fa-xmark");
 const containermodal = document.querySelector(".container_modal");
@@ -99,54 +84,44 @@ const loged = window.sessionStorage.loged;
 const lougout = document.querySelector("header nav .logout");
 const pictures = document.querySelector(".pictures");
 
-
-
-
-
 function isUserLoggedIn() {
   // Vérifier la présence du token dans le localStorage
-  return localStorage.getItem('token') !== null;
+  return localStorage.getItem("token") !== null;
 }
 
 // Fonction de déconnexion (logout)
 function logout() {
- 
-  localStorage.removeItem('token');
+  localStorage.removeItem("token");
 }
 
 // si lutilisation est connecté
 if (isUserLoggedIn()) {
-  console.log('Utilisateur connecté');
+  console.log("Utilisateur connecté");
   lougout.textContent = "logout";
   modifier.textContent = "modifier";
-  editicon.style.display = 'inline-flex';
+  editicon.style.display = "inline-flex";
 } else {
-  console.log('Utilisateur déconnecté');
+  console.log("Utilisateur déconnecté");
 }
 
 // Déconnexion
 //logout();
 
-
-
-
-
 //affichage modale quand connecté//
 
 modifier.addEventListener("click", () => {
-  containermodal.style.display = 'inline-flex';
+  containermodal.style.display = "inline-flex";
 });
 //exit//
 xmark.addEventListener("click", () => {
-  containermodal.style.display = 'none';
+  containermodal.style.display = "none";
 });
-
 
 //affichage photos dans modale//
 
 async function DisplayPictures() {
   const AllWorks = await getWorks();
-  AllWorks.forEach(work => {
+  AllWorks.forEach((work) => {
     const figure = document.createElement("figure");
     const span = document.createElement("span");
     const img = document.createElement("img");
@@ -158,39 +133,38 @@ async function DisplayPictures() {
     figure.appendChild(span);
     figure.appendChild(img);
     pictures.appendChild(figure);
-
   });
-  deleteworks()
 }
-
-DisplayPictures();
 
 //suppression image modale// //ALLER DANS LE DOM CHERCHER ELEMENT ET EFFACER//
 
 function deleteworks() {
-  const trashALL = document.querySelectorAll(" .fa-trash-can")
-  const token = localStorage.getItem('token')
-  trashALL.forEach(trash => {
+  const trashALL = document.querySelectorAll(" .fa-trash-can");
+  const token = localStorage.getItem("token");
+  trashALL.forEach((trash) => {
     trash.addEventListener("click", (e) => {
-      const id = trash.id
+      const id = trash.id;
       const init = {
         method: "DELETE",
-        headers: { "content-Type": "application/json", "Authorization" : "Bearer" + token},
-      }
+        headers: {
+          "content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      };
       fetch("http://localhost:5678/api/works/" + id, init)
         .then((response) => {
           if (!response.ok) {
-            console.log("delete na pas marché")
+            console.log("delete na pas marché");
           }
-          return response.json()
+          return response.json();
         })
         .then((data) => {
           console.log("le delete a reussi:", data);
-         
-        })
-    })
-  })
+        });
+    });
+  });
 }
+deleteworks();
 //faire apparaitre deuxieme modale//
 
 const btnaddmodal = document.querySelector(".container_modal .add_photo");
@@ -203,52 +177,49 @@ function displayaddmodal() {
   btnaddmodal.addEventListener("click", () => {
     modaladdphotos.style.display = "inline-flex";
     modalgallery.style.display = "none";
-  })
-  arrowleft.addEventListener("click",()=>{
+  });
+  arrowleft.addEventListener("click", () => {
     modaladdphotos.style.display = "none";
     modalgallery.style.display = "flex";
-  })
-  addclose.addEventListener("click",()=>{
-    containermodal.style.display = "none"
-  })
+  });
+  addclose.addEventListener("click", () => {
+    containermodal.style.display = "none";
+  });
 }
 displayaddmodal();
 // previsualisation de limage à ajouter//
 const view = document.querySelector(".container_photo img");
-const inputmodal = document.querySelector(".container_photo input") ;
+const inputmodal = document.querySelector(".container_photo input");
 const labelmodal = document.querySelector(".container_photo label");
 const inconmodal = document.querySelector(".container_photo  .fa-image");
-const pmodal = document.querySelector(".container_photo p") ;
+const pmodal = document.querySelector(".container_photo p");
 
-inputmodal.addEventListener("change",()=>
-  {
+inputmodal.addEventListener("change", () => {
   const file = inputmodal.files[0];
   console.log(file);
-  if(file){
+  if (file) {
     const reader = new FileReader();
-    reader.onload = function (e){
+    reader.onload = function (e) {
       view.src = e.target.result;
       view.style.display = "flex";
       labelmodal.style.display = "none";
       inconmodal.style.display = "none";
       pmodal.style.display = "none";
-    }
+    };
     reader.readAsDataURL(file);
   }
-  
-})
+});
 
 //LISTE CATEGORIES DANS INPUT//
-async function categoriesadd (){
-const select = document.querySelector(".modal_add_photo select");
-const categories = await getCatergories();
-categories.forEach(category => {
-  const option = document.createElement("option");
+async function categoriesadd() {
+  const select = document.querySelector(".modal_add_photo select");
+  const categories = await getCategories();
+  categories.forEach((category) => {
+    const option = document.createElement("option");
     option.value = category.id;
     option.textContent = category.name;
     select.appendChild(option);
-  
-})
+  });
 }
 categoriesadd();
 
@@ -257,37 +228,46 @@ const form = document.querySelector(".modal_add_photo form");
 const title = document.querySelector(".modal_add_photo #title");
 const category = document.querySelector(".modal_add_photo #category");
 
-form.addEventListener("submit", async (e)=>{
-  e.preventDefault()
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
   const formData = new FormData(form);
-  
-  fetch("http://localhost:5678/api/works/",{
-    method:"POST",
-    body:JSON.stringify(formData),
-    headers:{ "content-Type": "application/json", "Authorization" : "Bearer" + token },
+
+  fetch("http://localhost:5678/api/works/", {
+    method: "POST",
+    body: JSON.stringify(formData),
+    headers: {
+      "content-Type": "application/json",
+      Authorization: "Bearer" + token,
+    },
   })
-  .then(response=> response.json())
-  .then(data=>{
-    console.log(data);
-    console.log("photo ajoutée", data)
-    displayWorks();
-    DisplayPictures;
-  })
-  .catch(error => console.log("erreur",error))
-})
+    .then((response) => response.json())
+    .then((data) => {});
+});
 
 //valider input//
 function inputok() {
-  const inputvalid = document.querySelector(".modal_add_photo button")
-  form.addEventListener("input",()=>{
-    if(!title.value ==""&&!category.value==""&&!inputFile.value==""){
-      inputvalid.classList.add("valid")
+  const inputvalid = document.querySelector(".modal_add_photo button");
+  form.addEventListener("input", () => {
+    if (!title.value == "" && !category.value == "" && !inputFile.value == "") {
+      inputvalid.classList.add("valid");
+    } else {
+      inputvalid.classList.remove("valid");
+      inputvalid.disabled = true;
     }
-    else{
-      inputvalid.classList.remove("valid")
-      inputvalid.disabled=true
-    }
-  })
+  });
 }
 inputok();
 
+function main() {
+  getWorks();
+  displayWorks();
+  DisplayPictures();
+}
+
+main();
+
+containermodal.addEventListener("click", () => {
+  modaladdphotos.style.display = "none";
+  modalgallery.style.display = "none";
+  containermodal.style.display = "none";
+});
