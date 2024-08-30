@@ -138,34 +138,78 @@ async function DisplayPictures() {
 
 //suppression image modale// //ALLER DANS LE DOM CHERCHER ELEMENT ET EFFACER//
 
-function deleteworks() {
-  const trashALL = document.querySelectorAll(" .fa-trash-can");
+// function deleteworks() {
+//   const trashALL = document.querySelectorAll(
+//     " .modal_gallery .fa-solid .fa-trash-can"
+//   );
+//   const token = localStorage.getItem("token");
+//   trashALL.forEach((trash) => {
+//     trash.addEventListener("click", (e) => {
+//       const id = trash.id;
+//       const init = {
+//         method: "DELETE",
+//         headers: {
+//           "content-Type": "application/json",
+//           Authorization: "Bearer " + token,
+//         },
+//       };
+//       fetch("http://localhost:5678/api/works/" + id, init)
+//         .then((response) => {
+//           if (!response.ok) {
+//             throw new Error("Erreur de suppression");
+//           }
+
+//           return response.json();
+//         })
+//         .then((data) => {
+//           console.log("delete reussi", data);
+//         })
+//         .catch((error) => {
+//           console.error("erreur", error);
+//         });
+//     });
+//   });
+// }
+// deleteworks();
+//faire apparaitre deuxieme modale//
+
+function deleteWorks() {
+  const trashIcons = document.querySelectorAll(".fa-trash-can");
   const token = localStorage.getItem("token");
-  trashALL.forEach((trash) => {
-    trash.addEventListener("click", (e) => {
+
+  trashIcons.forEach((trash) => {
+    trash.addEventListener("click", () => {
       const id = trash.id;
-      const init = {
-        method: "DELETE",
-        headers: {
-          "content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      };
-      fetch("http://localhost:5678/api/works/" + id, init)
-        .then((response) => {
-          if (!response.ok) {
-            console.log("delete na pas marché");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("le delete a reussi:", data);
-        });
+      deleteWorkById(id, token);
     });
   });
 }
-deleteworks();
-//faire apparaitre deuxieme modale//
+
+async function deleteWorkById(id, token) {
+  const init = {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const response = await fetch(`http://localhost:5678/api/works/${id}`, init);
+
+    if (!response.ok) {
+      throw new Error("Échec de la suppression");
+    }
+
+    const data = await response.json();
+    console.log("La suppression a réussi :", data);
+  } catch (error) {
+    console.error("Erreur :", error);
+  }
+}
+
+// Appel à la fonction pour initialiser les événements
+deleteWorks();
 
 const btnaddmodal = document.querySelector(".container_modal .add_photo");
 const modaladdphotos = document.querySelector(".modal_add_photo");
@@ -248,7 +292,7 @@ form.addEventListener("submit", async (e) => {
 function inputok() {
   const inputvalid = document.querySelector(".modal_add_photo button");
   form.addEventListener("input", () => {
-    if (!title.value == "" && !category.value == "" && !inputFile.value == "") {
+    if (title.value !== "" && category.value !== "" && inputFile.value !== "") {
       inputvalid.classList.add("valid");
     } else {
       inputvalid.classList.remove("valid");
@@ -266,8 +310,10 @@ function main() {
 
 main();
 
-containermodal.addEventListener("click", () => {
-  modaladdphotos.style.display = "none";
-  modalgallery.style.display = "none";
-  containermodal.style.display = "none";
-});
+// containermodal.addEventListener("click", (event) => {
+//   if (event.target === containermodal) {
+//     modalgallery.style.display = "none";
+//     modaladdphotos.style.display = "none";
+
+//   }
+// });
