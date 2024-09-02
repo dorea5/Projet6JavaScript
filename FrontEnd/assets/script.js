@@ -111,6 +111,7 @@ if (isUserLoggedIn()) {
 
 modifier.addEventListener("click", () => {
   containermodal.style.display = "inline-flex";
+  modalgallery.style.display = "inline-flex";
 });
 //exit//
 xmark.addEventListener("click", () => {
@@ -208,7 +209,6 @@ async function deleteWorkById(id, token) {
   }
 }
 
-// Appel à la fonction pour initialiser les événements
 deleteWorks();
 
 const btnaddmodal = document.querySelector(".container_modal .add_photo");
@@ -278,21 +278,22 @@ form.addEventListener("submit", async (e) => {
 
   fetch("http://localhost:5678/api/works/", {
     method: "POST",
-    body: JSON.stringify(formData),
+    body: formData,
     headers: {
-      "content-Type": "application/json",
       Authorization: "Bearer" + token,
     },
   })
     .then((response) => response.json())
-    .then((data) => {});
+    .then((data) => {
+      console.log("ajout reussi:", data);
+    });
 });
 
 //valider input//
 function inputok() {
   const inputvalid = document.querySelector(".modal_add_photo button");
   form.addEventListener("input", () => {
-    if (title.value !== "" && category.value !== "" && inputFile.value !== "") {
+    if (title.value !== "" && category.value !== "" && form.value !== "") {
       inputvalid.classList.add("valid");
     } else {
       inputvalid.classList.remove("valid");
@@ -306,14 +307,13 @@ function main() {
   getWorks();
   displayWorks();
   DisplayPictures();
+  containermodal.addEventListener("click", (event) => {
+    if (event.target === containermodal) {
+      containermodal.style.display = "none";
+      modalgallery.style.display = "none";
+      modaladdphotos.style.display = "none";
+    }
+  });
 }
 
 main();
-
-// containermodal.addEventListener("click", (event) => {
-//   if (event.target === containermodal) {
-//     modalgallery.style.display = "none";
-//     modaladdphotos.style.display = "none";
-
-//   }
-// });
