@@ -129,60 +129,18 @@ async function DisplayPictures() {
     const trash = document.createElement("i");
     trash.classList.add("fa-solid", "fa-trash-can");
     trash.id = work.id;
+    const token = localStorage.getItem("token");
+
+    trash.addEventListener("click", () => {
+      const id = trash.id;
+      deleteWorkById(id, token);
+    });
+
     img.src = work.imageUrl;
     span.appendChild(trash);
     figure.appendChild(span);
     figure.appendChild(img);
     pictures.appendChild(figure);
-  });
-}
-
-//suppression image modale// //ALLER DANS LE DOM CHERCHER ELEMENT ET EFFACER//
-
-// function deleteworks() {
-//   const trashALL = document.querySelectorAll(
-//     " .modal_gallery .fa-solid .fa-trash-can"
-//   );
-//   const token = localStorage.getItem("token");
-//   trashALL.forEach((trash) => {
-//     trash.addEventListener("click", (e) => {
-//       const id = trash.id;
-//       const init = {
-//         method: "DELETE",
-//         headers: {
-//           "content-Type": "application/json",
-//           Authorization: "Bearer " + token,
-//         },
-//       };
-//       fetch("http://localhost:5678/api/works/" + id, init)
-//         .then((response) => {
-//           if (!response.ok) {
-//             throw new Error("Erreur de suppression");
-//           }
-
-//           return response.json();
-//         })
-//         .then((data) => {
-//           console.log("delete reussi", data);
-//         })
-//         .catch((error) => {
-//           console.error("erreur", error);
-//         });
-//     });
-//   });
-// }
-// deleteworks();
-//faire apparaitre deuxieme modale//
-
-function deleteWorks() {
-  const trashIcons = document.querySelectorAll(".fa-trash-can");
-  const token = localStorage.getItem("token");
-
-  trashIcons.forEach((trash) => {
-    trash.addEventListener("click", () => {
-      const id = trash.id;
-      deleteWorkById(id, token);
-    });
   });
 }
 
@@ -208,8 +166,6 @@ async function deleteWorkById(id, token) {
     console.error("Erreur :", error);
   }
 }
-
-deleteWorks();
 
 const btnaddmodal = document.querySelector(".container_modal .add_photo");
 const modaladdphotos = document.querySelector(".modal_add_photo");
@@ -307,6 +263,7 @@ function main() {
   getWorks();
   displayWorks();
   DisplayPictures();
+  deleteWorkById();
   containermodal.addEventListener("click", (event) => {
     if (event.target === containermodal) {
       containermodal.style.display = "none";
@@ -314,6 +271,32 @@ function main() {
       modaladdphotos.style.display = "none";
     }
   });
+
+  async function deleteWorkById(id, token) {
+    const init = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const response = await fetch(
+        `http://localhost:5678/api/works/${id}`,
+        init
+      );
+
+      if (!response.ok) {
+        throw new Error("Échec de la suppression");
+      }
+
+      const data = await response.json();
+      console.log("La suppression a réussi :", data);
+    } catch (error) {
+      console.error("Erreur :", error);
+    }
+  }
 }
 
 main();
