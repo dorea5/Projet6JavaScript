@@ -254,20 +254,25 @@ footer nav ul {
 	margin: 2em
 }
 
+.galerie_photo{
+	margin-bottom: 2em;
+	font-size: 25px;
+	font-weight: 400;
+}
 
 .pictures{
 	display: flex;
-    width: 70%;
-    flex-wrap: wrap;
-    height: 417px;
-    gap: 2px;
-    margin-top: 2em;
+	width: 29em;
+	flex-wrap: wrap;
+	gap: 1em;
+	margin-top: 0em;
+	height: 24em;
 }
 
 .pictures img {
 	
-	width: 90%;
-  height: 80px;
+	width: 5em;
+  height: 6.5em;
 	
 	
 }
@@ -275,10 +280,14 @@ footer nav ul {
  .fa-trash-can {
 	font-weight: 900;
 	position: absolute;
-	font-size: 15px;
+	font-size: 8px;
 	cursor: pointer;
-	padding-left: 40px;
-	padding-top: 5px;
+	padding: 4px;
+	background-color: black;
+	color: white;
+	border-radius: 3px;
+	margin-left: 49px;
+	margin-top: 5px;
 
 }
 
@@ -318,13 +327,12 @@ footer nav ul {
 	background-color: white;
 	border-radius: 10px;
 	flex-direction: column;
-	margin-left: 60em;
-  margin-top: 10em;
-	margin-bottom: 10em;
-
+	width: 50em;
+	height: 50em;
+	margin-left: 55em;
+	margin-top: 9em;
+	
 }
-
-
 
 .modal_add_photo{
 	display: none;
@@ -334,9 +342,8 @@ footer nav ul {
 	position: relative;
 	border-radius: 10px;
 	flex-direction: column;
-	margin-left: 60em;
-  margin-top: 10em;
-	margin-bottom: 10em;
+	width: 10em;
+	height: 10em;
 
 }
 
