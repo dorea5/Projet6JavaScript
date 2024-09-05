@@ -342,9 +342,10 @@ footer nav ul {
 	position: relative;
 	border-radius: 10px;
 	flex-direction: column;
-	width: 10em;
-	height: 10em;
-
+	width: 50em;
+	height: 50em;
+	margin-left: 55em;
+	margin-top: 9em;
 }
 
 
@@ -353,6 +354,11 @@ footer nav ul {
 .modal_add_photo .fa-xmark {
 	display: flex;
 	cursor: pointer;
+	position: absolute;
+    top: 40px;
+    right: 47px;
+    cursor: pointer;
+    font-size: 20px;
 
 }
 
@@ -360,7 +366,12 @@ footer nav ul {
 	
 	cursor: pointer;
 	display: flex;
-	
+	cursor: pointer;
+  position: absolute;
+	top: 42px;
+	left: 51px;
+	font-weight: 600;
+	font-size: 20px;
 }
 
 
@@ -385,19 +396,16 @@ footer nav ul {
 }
 
 .container_photo label {
-	color: #306685;
-	background-color: #ddd;
+	color: #6084a0;
+	background-color: #B9C5CC;
 	border-radius: 20px;
-	font-size: 0.8em;
+	font-size: 1em;
 	font-weight: 600;
-	padding: 0.5em 1.5em;
-	display: flex;
-}
+	padding: 0.7em 2em;
+	display: flex;}
 
 .container_photo img {
 	display: none;
-	position: absolute;
-	height: 100px;
 }
 
 .container_photo input {
@@ -405,42 +413,43 @@ footer nav ul {
 }
 
 .container_photo .fa-image{
-	font-size: 100px;
+	font-size: 77px;
 	color: #B9C5CC;
+	margin: 0.2em;
 
 }
 
 .bouton {
-	background-color: white;
-	padding: 5px 10px;
-	border-radius: 25px;
-	border: none;
-	color: white;
-	background-color: #B9C5CC;
-	
-	padding: 0.5em 6em;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin-left: 6em;
-	margin-top: 4em;
-	cursor: pointer;
+
+	  display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    color: white;
+    background-color: #abadab;
+    padding: 0.9em 7em;
+    margin-left: 8.5em;
+    margin-top: 5em;
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 20px;
+    width: 254px;
 }
 
 
 .modal_add_photo form .infos input {
 	background-color: white;
-	padding: 5px 10px;
-	border: none;
-	display: flex;
-	box-shadow: 0px 4px 14px 0px #00000017;
-	width: 420px;
-	height: 51px;
-	top: 1011px;
-	left: 510px;
-	gap: 0px;
-	opacity: 0px;
-	margin-bottom: 2em;
+    border: none;
+    display: flex;
+    box-shadow: 0px 4px 14px 0px #00000017;
+    width: 100%;
+    height: 51px;
+    top: 1011px;
+    left: 510px;
+    gap: 0px;
+    opacity: 0px;
+    margin-bottom: 2em;
+    margin-top: 0.5em;
 
 	
 }
@@ -452,17 +461,15 @@ footer nav ul {
 }
 .modal_add_photo form .infos select {
 	background-color: white;
-	padding: 5px 10px;
-	border: none;
-	display: flex;
-	box-shadow: 0px 4px 14px 0px #00000017;
-	width: 420px;
-	height: 51px;
-	top: 1011px;
-	left: 510px;
-	gap: 0px;
-	opacity: 0px;
-
+    border: none;
+    display: flex;
+    box-shadow: 0px 4px 14px 0px #00000017;
+    width: 480px;
+    height: 51px;
+    top: 1011px;
+    left: 510px;
+    opacity: 0px;
+    margin-top: 0.6em;
 
 	
 }
@@ -475,9 +482,10 @@ footer nav ul {
 .fa-xmark{
 	
 	position: absolute;
-	top:0px;
-	right: 0px;
+	top: 40px;
+	right: 47px;
 	cursor: pointer;
+	font-size: 20px;
 }
 
 .grey_line{
@@ -489,12 +497,11 @@ footer nav ul {
 }
 
 .grey_line_add{
-	background-color:  #ddd;
 	position: absolute;
-	height: 1.5px;
-	width: 370px;
-	margin-top: 1.5em;
-	margin-left: 1.5em;
+    height: 1.4px;
+    width: 482px;
+    margin-top: 2.5em;
+    background-color: #c6c6c6;
 }
 
 
@@ -506,12 +513,14 @@ footer nav ul {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	font-size: 25px;
+  padding-bottom: 1.5em;
 }
 
 .container_photo p {
 	color:#444444;
 	
-	padding: 5px;
+	padding: 14px;
 }
 
 .valid{
