@@ -225,10 +225,10 @@ categoriesadd();
 
 //post pour ajouter une photo/
 const form = document.querySelector(".modal_add_photo form");
-const title = document.querySelector(".modal_add_photo #title");
-const category = document.querySelector(".modal_add_photo #category");
+const title = document.querySelector(".modal_add_photo title");
+const category = document.querySelector(".modal_add_photo category");
 
-form.addEventListener("submit", async (e) => {
+form.addEventListener("submit", (e) => {
   e.preventDefault();
   const formData = new FormData(form);
 
@@ -241,11 +241,13 @@ form.addEventListener("submit", async (e) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log("ajout reussi:", data);
+      const nouveaupost = document.createElement("img");
+      const parentelement = document.querySelector("figure");
+      parentelement.appendChild(nouveaupost);
     });
 });
 
-//valider input//
+//valider input si form rempli completement//
 function inputok() {
   const inputvalid = document.querySelector(".modal_add_photo button");
   form.addEventListener("input", () => {
