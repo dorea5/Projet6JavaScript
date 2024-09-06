@@ -162,14 +162,15 @@ li:hover {
 
 		.add_photo{
 			font-family: 'Syne';
-			color: white;
-			margin: 1.5em 1em;
-			text-align: center;
-			background-color:  #1D6154;
-			padding: 1em 4em;
-			border-radius: 60px;
-			display: flex;
-			cursor: pointer;
+    color: white;
+    margin: 1.5em 1em;
+    text-align: center;
+    background-color: #1D6154;
+    padding: 1em 4em;
+    border-radius: 60px;
+    display: flex;
+    cursor: pointer;
+    margin-top: 6em;
 		}
 	
 			.marg{
@@ -327,9 +328,9 @@ footer nav ul {
 	background-color: white;
 	border-radius: 10px;
 	flex-direction: column;
-	width: 50em;
+	width: 47em;
 	height: 50em;
-	margin-left: 55em;
+	margin-left: 57em;
 	margin-top: 9em;
 	
 }
@@ -342,9 +343,9 @@ footer nav ul {
 	position: relative;
 	border-radius: 10px;
 	flex-direction: column;
-	width: 50em;
+	width: 47em;
 	height: 50em;
-	margin-left: 55em;
+	margin-left: 57em;
 	margin-top: 9em;
 }
 
@@ -434,6 +435,7 @@ footer nav ul {
     font-size: 1em;
     border-radius: 20px;
     width: 254px;
+		font-family: 'Syne';
 }
 
 
@@ -482,18 +484,18 @@ footer nav ul {
 .fa-xmark{
 	
 	position: absolute;
-	top: 40px;
-	right: 47px;
+	top: 13px;
+	right: 15px;
 	cursor: pointer;
 	font-size: 20px;
 }
 
 .grey_line{
-	background-color:  #ddd;
-	position: absolute;
-	height: 2px;
-	width: 370px;
-	margin-top: 19em;
+	background-color: #ddd;
+    position: absolute;
+    height: 2.2px;
+    width: 410px;
+    margin-top: 25.5em;
 }
 
 .grey_line_add{
@@ -524,5 +526,5 @@ footer nav ul {
 }
 
 .valid{
-	background-color: burlywood;
+	background-color: #1D6154;
 }
