@@ -222,15 +222,7 @@ const category = document.querySelector(".modal_add_photo category");
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-  const formData = new FormData(form);
-  if (
-    !formData.get("title") ||
-    !formData.get("category") ||
-    !formData.get("form")
-  ) {
-    alert("Veuillez remplir tous les champs.");
-    return;
-  }
+
   try {
     fetch("http://localhost:5678/api/works/", {
       method: "POST",
@@ -269,8 +261,13 @@ form.addEventListener("submit", (e) => {
 //valider form//
 function inputok() {
   const inputvalid = document.querySelector(".modal_add_photo button");
-  form.addEventListener("input", () => {
-    if (title.value !== "" && category.value !== "" && form.value !== "") {
+  form.addEventListener("change", () => {
+    const formData = new FormData(form);
+    if (
+      !formData.get("title") ||
+      !formData.get("category") ||
+      !formData.get("image")
+    ) {
       inputvalid.classList.add("valid");
     } else {
       inputvalid.classList.remove("valid");
