@@ -9,11 +9,11 @@ async function getWorks() {
 async function displayWorks() {
   const projects = await getWorks();
   projects.forEach((project) => {
-    createprojects(project);
+    createProjects(project);
   });
 }
 
-function createprojects(project) {
+function createProjects(project) {
   const figure = document.createElement("figure");
   figure.id = `figure_${project.id}`;
   const img = document.createElement("img");
@@ -25,7 +25,7 @@ function createprojects(project) {
   gallery.appendChild(figure);
 }
 
-/*******affichage filtres***************** */
+//affichage filtres
 
 async function getCategories() {
   const response = await fetch("http://localhost:5678/api/categories");
@@ -46,7 +46,7 @@ async function Buttons() {
 
 Buttons();
 
-////filtrer///
+//filtrer
 
 async function filterCategories() {
   const AllWorks = await getWorks();
@@ -54,17 +54,17 @@ async function filterCategories() {
   buttons.forEach((button) => {
     button.addEventListener("click", (e) => {
       const btnId = e.target.id;
-      gallery.innerHTML = ""; /// suppression de la gallerie avant filtrage//
+      gallery.innerHTML = "";
       if (btnId !== "0") {
         const worksfilteredcategory = AllWorks.filter((project) => {
           return project.categoryId == btnId;
         });
-        //tableau trié mais pas affiché//
+
         worksfilteredcategory.forEach((project) => {
-          createprojects(project);
+          createProjects(project);
         });
       } else {
-        displayWorks(); //tous//
+        displayWorks();
       }
     });
   });
@@ -80,27 +80,24 @@ const loged = window.sessionStorage.loged;
 const lougout = document.querySelector("header nav .logout");
 const pictures = document.querySelector(".pictures");
 
+//token dans le localStorage
 function isUserLoggedIn() {
-  // Vérifier la présence du token dans le localStorage
   return localStorage.getItem("token") !== null;
 }
 
-// Fonction de déconnexion (logout)
+//logout
 function logout() {
   localStorage.removeItem("token");
 }
 
-// si lutilisation est connecté
+//login
 if (isUserLoggedIn()) {
   lougout.textContent = "logout";
   modifier.textContent = "modifier";
   editicon.style.display = "inline-flex";
 }
 
-// Déconnexion
-//logout();
-
-//affichage modale quand connecté//
+//affichage modale au logout
 
 modifier.addEventListener("click", () => {
   containermodal.style.display = "inline-flex";
@@ -111,7 +108,7 @@ xmark.addEventListener("click", () => {
   containermodal.style.display = "none";
 });
 
-//affichage photos dans modale//
+//affichage photos dans modale
 
 async function DisplayPictures() {
   const AllWorks = await getWorks();
@@ -182,7 +179,8 @@ function displayaddmodal() {
   });
 }
 displayaddmodal();
-// previsualisation de limage à ajouter//
+
+// previsualisation de limage à ajouter
 const view = document.querySelector(".container_photo img");
 const inputmodal = document.querySelector(".container_photo input");
 const labelmodal = document.querySelector(".container_photo label");
@@ -204,7 +202,7 @@ inputmodal.addEventListener("change", () => {
   }
 });
 
-//LISTE CATEGORIES DANS INPUT//
+//liste categories//
 async function categoriesadd() {
   const select = document.querySelector(".modal_add_photo select");
   const categories = await getCategories();
@@ -225,23 +223,50 @@ const category = document.querySelector(".modal_add_photo category");
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const formData = new FormData(form);
-
-  fetch("http://localhost:5678/api/works/", {
-    method: "POST",
-    body: formData,
-    headers: {
-      Authorization: "Bearer" + token,
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      const nouveaupost = document.createElement("img");
-      const parentelement = document.querySelector("figure");
-      parentelement.appendChild(nouveaupost);
+  if (
+    !formData.get("title") ||
+    !formData.get("category") ||
+    !formData.get("form")
+  ) {
+    alert("Veuillez remplir tous les champs.");
+    return;
+  }
+  try {
+    fetch("http://localhost:5678/api/works/", {
+      method: "POST",
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
+
+    if (!response.ok) {
+      throw new Error("Erreur lors de l'ajout de la photo");
+    }
+
+    const data = response.json(); // Récupérer les données renvoyées par l'API
+
+    // Créer un nouvel élément pour afficher la photo
+    const newPost = document.createElement("figure");
+    const img = document.createElement("img");
+    img.src = data.imageUrl; //si l'API renvoie bien l'URL de l'image
+    img.alt = data.title; //texte alternatif
+    const figcaption = document.createElement("figcaption");
+    figcaption.textContent = data.title; //Titre de l'image
+
+    newPost.appendChild(img);
+    newPost.appendChild(figcaption);
+    pictures.appendChild(newPost); //ajout à gallery
+    modaladdphotos.appendChild(newPost);
+
+    //Fermer la modale ou vider le formulaire
+    form.reset(); // Vider le formulaire après ajout
+  } catch (error) {
+    console.error("Erreur :", error);
+  }
 });
 
-//valider input si form rempli completement//
+//valider form//
 function inputok() {
   const inputvalid = document.querySelector(".modal_add_photo button");
   form.addEventListener("input", () => {
