@@ -15,6 +15,7 @@ async function displayWorks() {
 
 function createprojects(project) {
   const figure = document.createElement("figure");
+  figure.id = `figure_${project.id}`;
   const img = document.createElement("img");
   const figcaption = document.createElement("figcaption");
   img.src = project.imageUrl;
@@ -22,7 +23,6 @@ function createprojects(project) {
   figure.appendChild(img);
   figure.appendChild(figcaption);
   gallery.appendChild(figure);
-  console.log("ca marche");
 }
 
 /*******affichage filtres***************** */
@@ -35,12 +35,10 @@ getCategories();
 
 async function Buttons() {
   const categories = await getCategories();
-  console.log(categories);
-
   categories.forEach((category) => {
     const btn = document.createElement("button");
     btn.textContent = category.name.toUpperCase();
-    btn.id = category.id;
+    btn.id = `category_${category.id}`;
     btn.classList.add("button_style");
     filters.appendChild(btn);
   });
@@ -68,8 +66,6 @@ async function filterCategories() {
       } else {
         displayWorks(); //tous//
       }
-
-      console.log(btnId);
     });
   });
 }
@@ -96,12 +92,9 @@ function logout() {
 
 // si lutilisation est connecté
 if (isUserLoggedIn()) {
-  console.log("Utilisateur connecté");
   lougout.textContent = "logout";
   modifier.textContent = "modifier";
   editicon.style.display = "inline-flex";
-} else {
-  console.log("Utilisateur déconnecté");
 }
 
 // Déconnexion
@@ -128,12 +121,17 @@ async function DisplayPictures() {
     const img = document.createElement("img");
     const trash = document.createElement("i");
     trash.classList.add("fa-solid", "fa-trash-can");
-    trash.id = work.id;
+    trash.id = `trash_${work.id}`;
+    trash.dataset.id = work.id;
     const token = localStorage.getItem("token");
 
-    trash.addEventListener("click", () => {
-      const id = trash.id;
-      deleteWorkById(id, token);
+    trash.addEventListener("click", (ev) => {
+      const id_base = ev.target.dataset.id;
+      deleteWorkById(id_base, token).then(() => {
+        ev.target.closest("figure").remove();
+        const figure_front = document.querySelector(`#figure_${id_base}`);
+        figure_front.remove();
+      });
     });
 
     img.src = work.imageUrl;
@@ -159,9 +157,6 @@ async function deleteWorkById(id, token) {
     if (!response.ok) {
       throw new Error("Échec de la suppression");
     }
-
-    const data = await response.json();
-    console.log("La suppression a réussi :", data);
   } catch (error) {
     console.error("Erreur :", error);
   }
@@ -196,7 +191,6 @@ const pmodal = document.querySelector(".container_photo p");
 
 inputmodal.addEventListener("change", () => {
   const file = inputmodal.files[0];
-  console.log(file);
   if (file) {
     const reader = new FileReader();
     reader.onload = function (e) {
@@ -223,7 +217,7 @@ async function categoriesadd() {
 }
 categoriesadd();
 
-//post pour ajouter une photo/
+//ajouter une photo//
 const form = document.querySelector(".modal_add_photo form");
 const title = document.querySelector(".modal_add_photo title");
 const category = document.querySelector(".modal_add_photo category");
@@ -265,7 +259,6 @@ function main() {
   getWorks();
   displayWorks();
   DisplayPictures();
-  deleteWorkById();
   containermodal.addEventListener("click", (event) => {
     if (event.target === containermodal) {
       containermodal.style.display = "none";
@@ -273,32 +266,6 @@ function main() {
       modaladdphotos.style.display = "none";
     }
   });
-
-  async function deleteWorkById(id, token) {
-    const init = {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    try {
-      const response = await fetch(
-        `http://localhost:5678/api/works/${id}`,
-        init
-      );
-
-      if (!response.ok) {
-        throw new Error("Échec de la suppression");
-      }
-
-      const data = await response.json();
-      console.log("La suppression a réussi :", data);
-    } catch (error) {
-      console.error("Erreur :", error);
-    }
-  }
 }
 
 main();
