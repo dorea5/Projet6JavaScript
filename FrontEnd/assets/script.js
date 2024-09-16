@@ -258,22 +258,33 @@ form.addEventListener("submit", (e) => {
   }
 });
 
-//valider form//
 function inputok() {
   const inputvalid = document.querySelector(".modal_add_photo button");
-  form.addEventListener("change", () => {
+  const form = document.querySelector(".modal_add_photo form");
+
+  // Fonction pour vérifier la validité des champs
+  function checkFormValidity() {
     const formData = new FormData(form);
-    if (
-      !formData.get("title") ||
-      !formData.get("category") ||
-      !formData.get("image")
-    ) {
+
+    // Vérifie si tous les champs requis sont remplis
+    const isValid =
+      formData.get("title") &&
+      formData.get("category") &&
+      formData.get("image");
+
+    // Met à jour l'état du bouton
+    if (isValid) {
       inputvalid.classList.add("valid");
+      inputvalid.disabled = false;
     } else {
       inputvalid.classList.remove("valid");
       inputvalid.disabled = true;
     }
-  });
+  }
+
+  // Écouteurs d'événements pour les champs du formulaire
+  form.addEventListener("input", checkFormValidity);
+  form.addEventListener("change", checkFormValidity); // Vérifie les selects
 }
 inputok();
 
