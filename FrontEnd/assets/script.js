@@ -217,14 +217,16 @@ categoriesadd();
 
 //ajouter une photo//
 const form = document.querySelector(".modal_add_photo form");
+const image = document.querySelector(".modal_add_photo image");
 const title = document.querySelector(".modal_add_photo title");
 const category = document.querySelector(".modal_add_photo category");
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  const formData = new FormData(form);
 
   try {
-    fetch("http://localhost:5678/api/works/", {
+    fetch("http://localhost:5678/api/works", {
       method: "POST",
       body: formData,
       headers: {
@@ -241,17 +243,16 @@ form.addEventListener("submit", (e) => {
     // Créer un nouvel élément pour afficher la photo
     const newPost = document.createElement("figure");
     const img = document.createElement("img");
-    img.src = data.imageUrl; //si l'API renvoie bien l'URL de l'image
-    img.alt = data.title; //texte alternatif
+    img.src = data.imageUrl; // Supposons que l'API renvoie l'URL de l'image
+    img.alt = data.title; // Texte alternatif
     const figcaption = document.createElement("figcaption");
-    figcaption.textContent = data.title; //Titre de l'image
+    figcaption.textContent = data.title; // Titre de l'image
 
     newPost.appendChild(img);
     newPost.appendChild(figcaption);
-    pictures.appendChild(newPost); //ajout à gallery
-    modaladdphotos.appendChild(newPost);
+    pictures.appendChild(newPost); // Ajout à la galerie
 
-    //Fermer la modale ou vider le formulaire
+    // Fermer la modale ou vider le formulaire
     form.reset(); // Vider le formulaire après ajout
   } catch (error) {
     console.error("Erreur :", error);
