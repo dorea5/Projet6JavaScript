@@ -92,6 +92,8 @@ function logout() {
 
 //login
 if (isUserLoggedIn()) {
+  const banner = document.querySelector(".banner");
+  banner.style.display = "inline-flex";
   lougout.textContent = "logout";
   modifier.textContent = "modifier";
   editicon.style.display = "inline-flex";
@@ -139,6 +141,7 @@ async function DisplayPictures() {
   });
 }
 
+//supprimer photo
 async function deleteWorkById(id, token) {
   const init = {
     method: "DELETE",
@@ -214,7 +217,11 @@ async function categoriesadd() {
   });
 }
 categoriesadd();
+const token = localStorage.getItem("token"); // Récupérer le token depuis le localStorage
 
+if (!token) {
+  console.error("Token non trouvé. Assurez-vous d'être connecté.");
+}
 //ajouter une photo//
 const form = document.querySelector(".modal_add_photo form");
 const image = document.querySelector(".modal_add_photo image");
@@ -226,7 +233,7 @@ form.addEventListener("submit", async (e) => {
   const formData = new FormData(form);
 
   try {
-    fetch("http://localhost:5678/api/works", {
+    fetch("http://localhost:5678/api/works/", {
       method: "POST",
       body: formData,
       headers: {
@@ -235,20 +242,25 @@ form.addEventListener("submit", async (e) => {
     });
 
     if (!response.ok) {
-      throw new Error("Erreur lors de l'ajout de la photo");
+      const errorData = await response.json(); // Récupérer les détails de l'erreur
+      throw new Error(
+        `Erreur ${response.status}: ${
+          errorData.message || "Erreur lors de l'ajout de la photo"
+        }`
+      );
     }
 
-    const data = response.json(); // Récupérer les données renvoyées par l'API
+    // Récupérer les données renvoyées par l'API
 
     // Créer un nouvel élément pour afficher la photo
     const newPost = document.createElement("figure");
     const img = document.createElement("img");
-    img.src = data.imageUrl; // Supposons que l'API renvoie l'URL de l'image
+    img.src = data.imageUrl;
     img.alt = data.title; // Texte alternatif
     const figcaption = document.createElement("figcaption");
     figcaption.textContent = data.title; // Titre de l'image
 
-    newPost.appendChild(img);
+    newPost.appendChild(image);
     newPost.appendChild(figcaption);
     pictures.appendChild(newPost); // Ajout à la galerie
 
