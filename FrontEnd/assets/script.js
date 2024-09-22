@@ -222,18 +222,15 @@ const token = localStorage.getItem("token"); // Récupérer le token depuis le l
 if (!token) {
   console.error("Token non trouvé. Assurez-vous d'être connecté.");
 }
+
 //ajouter une photo//
 const form = document.querySelector(".modal_add_photo form");
-const image = document.querySelector(".modal_add_photo image");
 const title = document.querySelector(".modal_add_photo title");
 const category = document.querySelector(".modal_add_photo category");
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const formData = new FormData(form);
-
+async function postNewProject(formData) {
   try {
-    fetch("http://localhost:5678/api/works/", {
+    const response = await fetch("http://localhost:5678/api/works/", {
       method: "POST",
       body: formData,
       headers: {
@@ -242,34 +239,28 @@ form.addEventListener("submit", async (e) => {
     });
 
     if (!response.ok) {
-      const errorData = await response.json(); // Récupérer les détails de l'erreur
       throw new Error(
-        `Erreur ${response.status}: ${
-          errorData.message || "Erreur lors de l'ajout de la photo"
-        }`
+        `Erreur ${response.status}:${"Erreur lors de la suppression"}`
       );
     }
-
-    // Récupérer les données renvoyées par l'API
-
-    // Créer un nouvel élément pour afficher la photo
-    const newPost = document.createElement("figure");
-    const img = document.createElement("img");
-    img.src = data.imageUrl;
-    img.alt = data.title; // Texte alternatif
-    const figcaption = document.createElement("figcaption");
-    figcaption.textContent = data.title; // Titre de l'image
-
-    newPost.appendChild(image);
-    newPost.appendChild(figcaption);
-    pictures.appendChild(newPost); // Ajout à la galerie
-
-    // Fermer la modale ou vider le formulaire
-    form.reset(); // Vider le formulaire après ajout
   } catch (error) {
     console.error("Erreur :", error);
   }
-});
+
+  const data = await response.json();
+
+  const newPost = document.createElement("figure");
+  const img = document.createElement("img");
+  img.src = data.imageUrl;
+  img.alt = data.title;
+  const figcaption = document.createElement("figcaption");
+  figcaption.textContent = data.title;
+  newPost.appendChild(img);
+  newPost.appendChild(figcaption);
+  pictures.appendChild(newPost);
+  gallery.appendChild(newPost);
+  form.reset();
+}
 
 function inputok() {
   const inputvalid = document.querySelector(".modal_add_photo button");
