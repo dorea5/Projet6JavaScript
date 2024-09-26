@@ -1,5 +1,25 @@
 const gallery = document.querySelector(".gallery");
 const filters = document.querySelector(".filters");
+const form = document.querySelector(".modal_add_photo form");
+const title = document.querySelector(".modal_add_photo title");
+const category = document.querySelector(".modal_add_photo category");
+const xmark = document.querySelector(".container_modal .fa-xmark");
+const containermodal = document.querySelector(".container_modal");
+const editicon = document.querySelector(".edit_icon");
+const modifier = document.querySelector(" .modifier");
+const loged = window.sessionStorage.loged;
+const lougout = document.querySelector("header nav .logout");
+const pictures = document.querySelector(".pictures");
+const btnaddmodal = document.querySelector(".container_modal .add_photo");
+const modaladdphotos = document.querySelector(".modal_add_photo");
+const modalgallery = document.querySelector(".modal_gallery");
+const arrowleft = document.querySelector(".fa-arrow-left");
+const addclose = document.querySelector(".modal_add_photo .fa-xmark");
+const view = document.querySelector(".container_photo img");
+const inputmodal = document.querySelector(".container_photo input");
+const labelmodal = document.querySelector(".container_photo label");
+const inconmodal = document.querySelector(".container_photo  .fa-image");
+const pmodal = document.querySelector(".container_photo p");
 
 async function getWorks() {
   const answer = await fetch("http://localhost:5678/api/works");
@@ -47,7 +67,6 @@ async function Buttons() {
 Buttons();
 
 //filtrer
-
 async function filterCategories() {
   const AllWorks = await getWorks();
   const buttons = document.querySelectorAll(".filters button");
@@ -71,14 +90,6 @@ async function filterCategories() {
 }
 
 filterCategories();
-
-const xmark = document.querySelector(".container_modal .fa-xmark");
-const containermodal = document.querySelector(".container_modal");
-const editicon = document.querySelector(".edit_icon");
-const modifier = document.querySelector(" .modifier");
-const loged = window.sessionStorage.loged;
-const lougout = document.querySelector("header nav .logout");
-const pictures = document.querySelector(".pictures");
 
 //token dans le localStorage
 function isUserLoggedIn() {
@@ -162,12 +173,6 @@ async function deleteWorkById(id, token) {
   }
 }
 
-const btnaddmodal = document.querySelector(".container_modal .add_photo");
-const modaladdphotos = document.querySelector(".modal_add_photo");
-const modalgallery = document.querySelector(".modal_gallery");
-const arrowleft = document.querySelector(".fa-arrow-left");
-const addclose = document.querySelector(".modal_add_photo .fa-xmark");
-
 function displayaddmodal() {
   btnaddmodal.addEventListener("click", () => {
     modaladdphotos.style.display = "inline-flex";
@@ -184,11 +189,6 @@ function displayaddmodal() {
 displayaddmodal();
 
 // previsualisation de limage à ajouter
-const view = document.querySelector(".container_photo img");
-const inputmodal = document.querySelector(".container_photo input");
-const labelmodal = document.querySelector(".container_photo label");
-const inconmodal = document.querySelector(".container_photo  .fa-image");
-const pmodal = document.querySelector(".container_photo p");
 
 inputmodal.addEventListener("change", () => {
   const file = inputmodal.files[0];
@@ -208,6 +208,12 @@ inputmodal.addEventListener("change", () => {
 //liste categories//
 async function categoriesadd() {
   const select = document.querySelector(".modal_add_photo select");
+
+  const defaultOption = document.createElement("option");
+  defaultOption.value = ""; // Valeur vide pour l'option par défaut
+  defaultOption.textContent = ""; // Message d'invite
+  select.appendChild(defaultOption);
+
   const categories = await getCategories();
   categories.forEach((category) => {
     const option = document.createElement("option");
@@ -224,9 +230,6 @@ if (!token) {
 }
 
 //ajouter une photo//
-const form = document.querySelector(".modal_add_photo form");
-const title = document.querySelector(".modal_add_photo title");
-const category = document.querySelector(".modal_add_photo category");
 
 async function postNewProject(formData) {
   try {
@@ -240,7 +243,7 @@ async function postNewProject(formData) {
 
     if (!response.ok) {
       throw new Error(
-        `Erreur ${response.status}:${"Erreur lors de la suppression"}`
+        `Erreur ${response.status}:Erreur lors de la suppression`
       );
     }
   } catch (error) {
@@ -255,12 +258,14 @@ async function postNewProject(formData) {
   img.alt = data.title;
   const figcaption = document.createElement("figcaption");
   figcaption.textContent = data.title;
+
   newPost.appendChild(img);
   newPost.appendChild(figcaption);
   pictures.appendChild(newPost);
   gallery.appendChild(newPost);
   form.reset();
 }
+form.addEventListener("submit", postNewProject);
 
 function inputok() {
   const inputvalid = document.querySelector(".modal_add_photo button");
