@@ -7,7 +7,6 @@ const xmark = document.querySelector(".container_modal .fa-xmark");
 const containermodal = document.querySelector(".container_modal");
 const editicon = document.querySelector(".edit_icon");
 const modifier = document.querySelector(" .modifier");
-const loged = window.sessionStorage.loged;
 const lougout = document.querySelector("header nav .logout");
 const pictures = document.querySelector(".pictures");
 const btnaddmodal = document.querySelector(".container_modal .add_photo");
@@ -21,18 +20,17 @@ const labelmodal = document.querySelector(".container_photo label");
 const inconmodal = document.querySelector(".container_photo  .fa-image");
 const pmodal = document.querySelector(".container_photo p");
 
+//Création de la galerie
 async function getWorks() {
   const answer = await fetch("http://localhost:5678/api/works");
   return await answer.json();
 }
-
 async function displayWorks() {
   const projects = await getWorks();
   projects.forEach((project) => {
     createProjects(project);
   });
 }
-
 function createProjects(project) {
   const figure = document.createElement("figure");
   figure.id = `figure_${project.id}`;
@@ -45,34 +43,31 @@ function createProjects(project) {
   gallery.appendChild(figure);
 }
 
-//affichage filtres
-
+//affichage des boutons filtres
 async function getCategories() {
   const response = await fetch("http://localhost:5678/api/categories");
   return await response.json();
 }
-getCategories();
-
 async function Buttons() {
   const categories = await getCategories();
   categories.forEach((category) => {
     const btn = document.createElement("button");
     btn.textContent = category.name.toUpperCase();
     btn.id = `category_${category.id}`;
+    console.log(btn.id);
     btn.classList.add("button_style");
     filters.appendChild(btn);
   });
 }
 
-Buttons();
-
-//filtrer
+//filtres
 async function filterCategories() {
   const AllWorks = await getWorks();
   const buttons = document.querySelectorAll(".filters button");
   buttons.forEach((button) => {
     button.addEventListener("click", (e) => {
       const btnId = e.target.id;
+      console.log("ID du bouton cliqué :", btnId);
       gallery.innerHTML = "";
       if (btnId !== "0") {
         const worksfilteredcategory = AllWorks.filter((project) => {
@@ -89,18 +84,14 @@ async function filterCategories() {
   });
 }
 
-filterCategories();
-
 //token dans le localStorage
 function isUserLoggedIn() {
   return localStorage.getItem("token") !== null;
 }
-
 //logout
 function logout() {
   localStorage.removeItem("token");
 }
-
 //login
 if (isUserLoggedIn()) {
   const banner = document.querySelector(".banner");
@@ -110,19 +101,26 @@ if (isUserLoggedIn()) {
   editicon.style.display = "inline-flex";
 }
 
-//affichage modale au logout
-
+//affichage modale galerie
 modifier.addEventListener("click", () => {
   containermodal.style.display = "inline-flex";
   modalgallery.style.display = "inline-flex";
+  modaladdphotos.style.display = "none";
 });
-//exit//
+//fermeture modale//
 xmark.addEventListener("click", () => {
   containermodal.style.display = "none";
 });
+//fermeture modales au click à coté
+containermodal.addEventListener("click", (event) => {
+  if (event.target === containermodal) {
+    containermodal.style.display = "none";
+    modalgallery.style.display = "none";
+    modaladdphotos.style.display = "none";
+  }
+});
 
-//affichage photos dans modale
-
+//affichage photos dans modale galerie
 async function DisplayPictures() {
   const AllWorks = await getWorks();
   AllWorks.forEach((work) => {
@@ -152,7 +150,7 @@ async function DisplayPictures() {
   });
 }
 
-//supprimer photo
+//supprimer une photo
 async function deleteWorkById(id, token) {
   const init = {
     method: "DELETE",
@@ -186,10 +184,8 @@ function displayaddmodal() {
     containermodal.style.display = "none";
   });
 }
-displayaddmodal();
 
-// previsualisation de limage à ajouter
-
+// previsualisation de l'image à ajouter
 inputmodal.addEventListener("change", () => {
   const file = inputmodal.files[0];
   if (file) {
@@ -208,7 +204,6 @@ inputmodal.addEventListener("change", () => {
 //liste categories//
 async function categoriesadd() {
   const select = document.querySelector(".modal_add_photo select");
-
   const defaultOption = document.createElement("option");
   defaultOption.value = ""; // Valeur vide pour l'option par défaut
   defaultOption.textContent = ""; // Message d'invite
@@ -222,15 +217,42 @@ async function categoriesadd() {
     select.appendChild(option);
   });
 }
-categoriesadd();
-const token = localStorage.getItem("token"); // Récupérer le token depuis le localStorage
 
+const token = localStorage.getItem("token");
 if (!token) {
   console.error("Token non trouvé. Assurez-vous d'être connecté.");
 }
 
-//ajouter une photo//
+//valider devient vert quand form rempli
+function inputok() {
+  const inputvalid = document.querySelector(".modal_add_photo button");
+  const form = document.querySelector(".modal_add_photo form");
 
+  // Fonction pour vérifier la validité des champs
+  function checkFormValidity() {
+    const formData = new FormData(form);
+
+    // Vérifie si tous les champs requis sont remplis
+    const isValid =
+      formData.get("title") &&
+      formData.get("category") &&
+      formData.get("image");
+
+    // Met à jour l'état du bouton
+    if (isValid) {
+      inputvalid.classList.add("valid");
+      inputvalid.disabled = false;
+    } else {
+      inputvalid.classList.remove("valid");
+      inputvalid.disabled = true;
+    }
+  }
+  // Écouteurs d'événements pour les champs du formulaire
+  form.addEventListener("input", checkFormValidity);
+  form.addEventListener("change", checkFormValidity); // Vérifie les selects
+}
+
+//ajouter une photo//
 async function postNewProject(formData) {
   try {
     const response = await fetch("http://localhost:5678/api/works/", {
@@ -267,47 +289,16 @@ async function postNewProject(formData) {
 }
 form.addEventListener("submit", postNewProject);
 
-function inputok() {
-  const inputvalid = document.querySelector(".modal_add_photo button");
-  const form = document.querySelector(".modal_add_photo form");
-
-  // Fonction pour vérifier la validité des champs
-  function checkFormValidity() {
-    const formData = new FormData(form);
-
-    // Vérifie si tous les champs requis sont remplis
-    const isValid =
-      formData.get("title") &&
-      formData.get("category") &&
-      formData.get("image");
-
-    // Met à jour l'état du bouton
-    if (isValid) {
-      inputvalid.classList.add("valid");
-      inputvalid.disabled = false;
-    } else {
-      inputvalid.classList.remove("valid");
-      inputvalid.disabled = true;
-    }
-  }
-
-  // Écouteurs d'événements pour les champs du formulaire
-  form.addEventListener("input", checkFormValidity);
-  form.addEventListener("change", checkFormValidity); // Vérifie les selects
-}
-inputok();
-
+//appel fonctions
 function main() {
+  displayaddmodal();
   getWorks();
   displayWorks();
   DisplayPictures();
-  containermodal.addEventListener("click", (event) => {
-    if (event.target === containermodal) {
-      containermodal.style.display = "none";
-      modalgallery.style.display = "none";
-      modaladdphotos.style.display = "none";
-    }
-  });
+  filterCategories();
+  inputok();
+  categoriesadd();
+  Buttons();
+  getCategories();
 }
-
 main();
