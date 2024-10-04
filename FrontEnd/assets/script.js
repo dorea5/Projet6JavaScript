@@ -71,7 +71,7 @@ async function filterCategories() {
       gallery.innerHTML = "";
       if (btnId !== "0") {
         const worksfilteredcategory = AllWorks.filter((project) => {
-          return project.categoryId == btnId;
+          return project.categoryId == btnId.split("_")[1];
         });
 
         worksfilteredcategory.forEach((project) => {
@@ -287,7 +287,11 @@ async function postNewProject(formData) {
   gallery.appendChild(newPost);
   form.reset();
 }
-form.addEventListener("submit", postNewProject);
+form.addEventListener("submit", function (Event) {
+  e.preventDefault();
+  const formData = new FormData(form);
+  postNewProject(formData);
+});
 
 //appel fonctions
 function main() {
