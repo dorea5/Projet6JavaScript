@@ -121,7 +121,7 @@ containermodal.addEventListener("click", (event) => {
 });
 
 //affichage photos dans modale galerie
-async function DisplayPictures() {
+async function displayPictures() {
   const AllWorks = await getWorks();
   AllWorks.forEach((work) => {
     const figure = document.createElement("figure");
@@ -298,7 +298,7 @@ function main() {
   displayaddmodal();
   getWorks();
   displayWorks();
-  DisplayPictures();
+  displayPictures();
   filterCategories();
   inputok();
   categoriesadd();
