@@ -1,24 +1,26 @@
 const gallery = document.querySelector(".gallery");
 const filters = document.querySelector(".filters");
-const form = document.querySelector(".modal_add_photo form");
-const title = document.querySelector(".modal_add_photo title");
-const category = document.querySelector(".modal_add_photo category");
+const form = document.querySelector(".addform form");
+const title = document.querySelector(".addform title");
+const category = document.querySelector(".addform category");
 const xmark = document.querySelector(".container_modal .fa-xmark");
 const containermodal = document.querySelector(".container_modal");
 const editicon = document.querySelector(".edit_icon");
 const modifier = document.querySelector(" .modifier");
 const lougout = document.querySelector("header nav .logout");
 const pictures = document.querySelector(".pictures");
-const btnaddmodal = document.querySelector(".container_modal .add_photo");
-const modaladdphotos = document.querySelector(".modal_add_photo");
+const addform = document.querySelector(".container_modal .addform");
+const btnaddform = document.querySelector(".container_modal .add_photo");
 const modalgallery = document.querySelector(".modal_gallery");
+const galleryTitle = document.querySelector(".galerie_photo");
 const arrowleft = document.querySelector(".fa-arrow-left");
-const addclose = document.querySelector(".modal_add_photo .fa-xmark");
+const addclose = document.querySelector(".addform .fa-xmark");
 const view = document.querySelector(".container_photo img");
 const inputmodal = document.querySelector(".container_photo input");
 const labelmodal = document.querySelector(".container_photo label");
 const inconmodal = document.querySelector(".container_photo  .fa-image");
 const pmodal = document.querySelector(".container_photo p");
+const btnvalidation = document.querySelector(".container_modal .bouton");
 
 //Création de la galerie
 async function getWorks() {
@@ -106,7 +108,11 @@ if (isUserLoggedIn()) {
 modifier.addEventListener("click", () => {
   containermodal.style.display = "inline-flex";
   modalgallery.style.display = "inline-flex";
-  modaladdphotos.style.display = "none";
+  addform.style.display = "none";
+  pictures.style.display = "flex";
+  galleryTitle.style.display = "flex";
+  btnaddform.style.display = "flex";
+  xmark.style.display = "flex";
 });
 //fermeture modale//
 xmark.addEventListener("click", () => {
@@ -117,7 +123,6 @@ containermodal.addEventListener("click", (event) => {
   if (event.target === containermodal) {
     containermodal.style.display = "none";
     modalgallery.style.display = "none";
-    modaladdphotos.style.display = "none";
   }
 });
 
@@ -176,19 +181,19 @@ async function deleteWorkById(id, token) {
   }
 }
 
-function displayaddmodal() {
-  btnaddmodal.addEventListener("click", () => {
-    modaladdphotos.style.display = "inline-flex";
-    modalgallery.style.display = "none";
+function displayaddform() {
+  btnaddform.addEventListener("click", () => {
+    pictures.style.display = "none";
+    galleryTitle.style.display = "none";
+    btnaddform.style.display = "none";
+    addform.style.display = "flex";
+    xmark.style.display = "none";
   });
   arrowleft.addEventListener("click", () => {
-    modaladdphotos.style.display = "none";
-    modalgallery.style.display = "flex";
-    view.style.display = "none"; // Cacher l'image prévisualisée
-    labelmodal.style.display = "flex"; // Réafficher le label
-    inconmodal.style.display = "flex"; // Réafficher l'icône
-    pmodal.style.display = "flex"; // Réafficher le texte
-    inputmodal.value = "";
+    pictures.style.display = "none";
+    galleryTitle.style.display;
+    arrowleft.style.display = "none";
+    btnaddform.style.display = "none";
   });
   addclose.addEventListener("click", () => {
     containermodal.style.display = "none";
@@ -218,7 +223,7 @@ inputmodal.addEventListener("change", () => {
 
 //liste categories//
 async function categoriesadd() {
-  const select = document.querySelector(".modal_add_photo select");
+  const select = document.querySelector(".addform select");
   const defaultOption = document.createElement("option");
   defaultOption.value = ""; // Valeur vide pour l'option par défaut
   defaultOption.textContent = ""; // Message d'invite
@@ -240,8 +245,7 @@ if (!token) {
 
 //valider devient vert quand form rempli
 function inputok() {
-  const inputvalid = document.querySelector(".modal_add_photo button");
-  const form = document.querySelector(".modal_add_photo form");
+  const inputvalid = document.querySelector(".addform button");
 
   // Fonction pour vérifier la validité des champs
   function checkFormValidity() {
@@ -302,7 +306,7 @@ form.addEventListener("submit", function (e) {
 
 //appel fonctions
 function main() {
-  displayaddmodal();
+  displayaddform();
   getWorks();
   displayWorks();
   displayPictures();
