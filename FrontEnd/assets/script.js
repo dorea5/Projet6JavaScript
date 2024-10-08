@@ -48,7 +48,7 @@ async function getCategories() {
   const response = await fetch("http://localhost:5678/api/categories");
   return await response.json();
 }
-async function Buttons() {
+async function buttons() {
   const categories = await getCategories();
   categories.forEach((category) => {
     const btn = document.createElement("button");
@@ -62,7 +62,7 @@ async function Buttons() {
 
 //filtres
 async function filterCategories() {
-  const AllWorks = await getWorks();
+  const allWorks = await getWorks();
   const buttons = document.querySelectorAll(".filters button");
   buttons.forEach((button) => {
     button.addEventListener("click", (e) => {
@@ -70,7 +70,7 @@ async function filterCategories() {
       console.log("ID du bouton cliqué :", btnId);
       gallery.innerHTML = "";
       if (btnId !== "0") {
-        const worksfilteredcategory = AllWorks.filter((project) => {
+        const worksfilteredcategory = allWorks.filter((project) => {
           return project.categoryId == btnId.split("_")[1];
         });
 
@@ -99,6 +99,7 @@ if (isUserLoggedIn()) {
   lougout.textContent = "logout";
   modifier.textContent = "modifier";
   editicon.style.display = "inline-flex";
+  filters.style.display = "none";
 }
 
 //affichage modale galerie
@@ -120,33 +121,37 @@ containermodal.addEventListener("click", (event) => {
   }
 });
 
-//affichage photos dans modale galerie
-async function displayPictures() {
-  const AllWorks = await getWorks();
-  AllWorks.forEach((work) => {
-    const figure = document.createElement("figure");
-    const span = document.createElement("span");
-    const img = document.createElement("img");
-    const trash = document.createElement("i");
-    trash.classList.add("fa-solid", "fa-trash-can");
-    trash.id = `trash_${work.id}`;
-    trash.dataset.id = work.id;
-    const token = localStorage.getItem("token");
+//création d'un élément projet dans la modale galerie
+function createDeleteModalProject(work) {
+  const figure = document.createElement("figure");
+  const span = document.createElement("span");
+  const img = document.createElement("img");
+  const trash = document.createElement("i");
+  trash.classList.add("fa-solid", "fa-trash-can");
+  trash.id = `trash_${work.id}`;
+  trash.dataset.id = work.id;
+  const token = localStorage.getItem("token");
 
-    trash.addEventListener("click", (ev) => {
-      const id_base = ev.target.dataset.id;
-      deleteWorkById(id_base, token).then(() => {
-        ev.target.closest("figure").remove();
-        const figure_front = document.querySelector(`#figure_${id_base}`);
-        figure_front.remove();
-      });
+  trash.addEventListener("click", (ev) => {
+    const id_base = ev.target.dataset.id;
+    deleteWorkById(id_base, token).then(() => {
+      ev.target.closest("figure").remove();
+      const figure_front = document.querySelector(`#figure_${id_base}`);
+      figure_front.remove();
     });
+  });
 
-    img.src = work.imageUrl;
-    span.appendChild(trash);
-    figure.appendChild(span);
-    figure.appendChild(img);
-    pictures.appendChild(figure);
+  img.src = work.imageUrl;
+  span.appendChild(trash);
+  figure.appendChild(span);
+  figure.appendChild(img);
+  pictures.appendChild(figure);
+}
+//affichage photos dans la modale galerie
+async function displayPictures() {
+  const allWorks = await getWorks();
+  allWorks.forEach((work) => {
+    createDeleteModalProject(work);
   });
 }
 
@@ -179,9 +184,19 @@ function displayaddmodal() {
   arrowleft.addEventListener("click", () => {
     modaladdphotos.style.display = "none";
     modalgallery.style.display = "flex";
+    view.style.display = "none"; // Cacher l'image prévisualisée
+    labelmodal.style.display = "flex"; // Réafficher le label
+    inconmodal.style.display = "flex"; // Réafficher l'icône
+    pmodal.style.display = "flex"; // Réafficher le texte
+    inputmodal.value = "";
   });
   addclose.addEventListener("click", () => {
     containermodal.style.display = "none";
+    view.style.display = "none"; // Cacher l'image prévisualisée
+    labelmodal.style.display = "flex"; // Réafficher le label
+    inconmodal.style.display = "flex"; // Réafficher l'icône
+    pmodal.style.display = "flex"; // Réafficher le texte
+    inputmodal.value = "";
   });
 }
 
@@ -268,26 +283,18 @@ async function postNewProject(formData) {
         `Erreur ${response.status}:Erreur lors de la suppression`
       );
     }
+    const data = await response.json();
+
+    createProjects(data);
+    createDeleteModalProject(data);
+
+    form.reset();
   } catch (error) {
     console.error("Erreur :", error);
   }
-
-  const data = await response.json();
-
-  const newPost = document.createElement("figure");
-  const img = document.createElement("img");
-  img.src = data.imageUrl;
-  img.alt = data.title;
-  const figcaption = document.createElement("figcaption");
-  figcaption.textContent = data.title;
-
-  newPost.appendChild(img);
-  newPost.appendChild(figcaption);
-  pictures.appendChild(newPost);
-  gallery.appendChild(newPost);
-  form.reset();
 }
-form.addEventListener("submit", function (Event) {
+
+form.addEventListener("submit", function (e) {
   e.preventDefault();
   const formData = new FormData(form);
   postNewProject(formData);
@@ -302,7 +309,7 @@ function main() {
   filterCategories();
   inputok();
   categoriesadd();
-  Buttons();
+  buttons();
   getCategories();
 }
 main();
