@@ -98,19 +98,10 @@ function isUserLoggedIn() {
   return localStorage.getItem("token") !== null;
 }
 
-//Mode déconnecté
-// if (logout()) {
-//   const banner = document.querySelector(".banner");
-//   banner.style.display = "none";
-//   logoutbtn.textContent = "login";
-//   modifier.style.display = "none";
-//   editicon.style.display = "none";
-//   filters.style.display = "flex";
-// }
-
 // Déconnexion : Supprime le token de localStorage
 function logout() {
   localStorage.removeItem("token");
+  window.location.replace("http://localhost:5678");
 }
 
 // Vérification de la connexion : Si l'utilisateur est connecté, affiche certains éléments
@@ -123,6 +114,7 @@ if (isUserLoggedIn()) {
   filters.style.display = "none";
 } else {
   // Affichage pour les utilisateurs déconnectés
+  const banner = document.querySelector(".banner");
   banner.style.display = "none"; // Masquer la bannière
   logoutbtn.textContent = "Login"; // Changer le texte du bouton
   modifier.style.display = "none"; // Masquer le bouton de modification
