@@ -100,8 +100,10 @@ function isUserLoggedIn() {
 
 // Déconnexion : Supprime le token de localStorage
 function logout() {
-  localStorage.removeItem("token");
-  window.location.replace("http://localhost:5678");
+  logoutbtn.addEventListener("click", () => {
+    localStorage.removeItem("token");
+    window.location.replace("http://localhost:5678");
+  });
 }
 
 // Vérification de la connexion : Si l'utilisateur est connecté, affiche certains éléments
@@ -113,6 +115,7 @@ if (isUserLoggedIn()) {
   editicon.style.display = "inline-flex";
   filters.style.display = "none";
 } else {
+  logout();
   // Affichage pour les utilisateurs déconnectés
   const banner = document.querySelector(".banner");
   banner.style.display = "none"; // Masquer la bannière
@@ -300,7 +303,7 @@ function inputok() {
   form.addEventListener("change", checkFormValidity); // Vérifie les selects
 }
 
-// Ajouter une photo : Envoie une requête POSR à l'API pour ajouter une nouvelle oeuvre
+// Ajouter une photo : Envoie une requête POST à l'API pour ajouter une nouvelle oeuvre
 async function postNewProject(formData) {
   try {
     const response = await fetch("http://localhost:5678/api/works/", {
@@ -345,5 +348,6 @@ function main() {
   categoriesadd(); //Remplit la liste des catégories
   buttons(); //Crée les boutons de filtrage
   getCategories(); //Récupère les catégories
+  logout();
 }
 main();
